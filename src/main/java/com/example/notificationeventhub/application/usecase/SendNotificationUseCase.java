@@ -1,7 +1,8 @@
 package com.example.notificationeventhub.application.usecase;
 
-import com.example.notificationeventhub.application.port.NotificationEvent;
+import com.example.notificationeventhub.application.port.NotifyEvent;
 import com.example.notificationeventhub.application.port.SendNotification;
+import com.example.notificationeventhub.model.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -9,16 +10,16 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SendNotificationUseCase implements SendNotification {
 
-    private final NotificationEvent notificationEvent;
+    private final NotifyEvent notifyEvent;
 
-    public SendNotificationUseCase(NotificationEvent notificationEvent) {
-        this.notificationEvent = notificationEvent;
+    public SendNotificationUseCase(NotifyEvent notifyEvent) {
+        this.notifyEvent = notifyEvent;
     }
 
     @Override
-    public void execute(String message){
+    public void execute(Message message){
         log.info("Starting send notification usecase");
-        notificationEvent.sendMessage(message);
+        notifyEvent.sendEvent(message);
         log.info("Finished send notification usecase");
     }
 }

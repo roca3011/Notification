@@ -2,7 +2,7 @@ package com.example.notificationeventhub.application.port;
 
 import com.example.notificationeventhub.model.Message;
 
-public interface SendNotification {
+public interface NotifyEvent {
 
-    void execute(Message message);
+    void sendEvent(Message message);
 }

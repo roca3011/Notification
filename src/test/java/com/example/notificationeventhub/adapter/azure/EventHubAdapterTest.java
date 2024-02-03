@@ -3,6 +3,10 @@ package com.example.notificationeventhub.adapter.azure;
 import com.azure.messaging.eventhubs.EventDataBatch;
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
 import com.azure.messaging.eventhubs.EventHubProducerClient;
+import com.example.notificationeventhub.Faker.MessageFaker;
+import com.example.notificationeventhub.model.Message;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @DisplayName("EventHubAdapter Test")
 @ExtendWith(MockitoExtension.class)
-class NotificationEventHubTest {
+class EventHubAdapterTest {
 
     @Mock
     private EventHubClientBuilder eventHubClientBuilder;
@@ -28,19 +32,24 @@ class NotificationEventHubTest {
     @Mock
     private EventDataBatch eventDataBatch;
 
+    @Mock
+    private ObjectMapper objectMapper;
 
     @InjectMocks
-    private NotificationEventHub notificationEventHub;
+    private EventHubAdapter eventHubAdapter;
 
     @Test
     @DisplayName("when recibe message then sent notification, ok")
-    void whenNotifyWhenUpdatingOk(){
-        var message = "Hello World";
+    void whenNotifyWhenUpdatingOk() throws JsonProcessingException {
+        var stringMessage = "{\"recipient\":\"123@email.com\", \"subject\":\"Test\", \"body\":\"Hello world\"}";
+        Message message = MessageFaker.getMessageFaker();
+
         when(eventHubClientBuilder.connectionString(any(), any())).thenReturn(eventHubClientBuilder);
         when(eventHubClientBuilder.buildProducerClient()).thenReturn(producer);
         when(producer.createBatch()).thenReturn(eventDataBatch);
         when(eventDataBatch.tryAdd(any())).thenReturn(true);
-        notificationEventHub.sendMessage(message);
+        when(objectMapper.writeValueAsString(any())).thenReturn(stringMessage);
+        eventHubAdapter.sendEvent(message);
         verify(producer, times(1)).createBatch();
         verify(producer, times(1)).send((EventDataBatch) any());
     }
