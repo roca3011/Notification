@@ -1,0 +1,25 @@
+# IntelliJ IDEA files
+.idea/
+
+# Compiled class file
+/target/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Maven
+mvnw
+mvnw.cmd
+.mvn/
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Gradle
+.gradle/
+build/
